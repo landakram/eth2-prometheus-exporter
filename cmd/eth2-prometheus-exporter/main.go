@@ -21,21 +21,7 @@ var listenAddr = flag.String("listen-address", ":8080", "The address to listen o
 var beaconChainAddr = flag.String("beacon-chain-address", ":5052", "The address of the beacon chain HTTP API.")
 var refreshInterval = flag.Duration("refresh-interval", 5*time.Second, "The interval between polling the beacon-chain for metrics.")
 
-type uint64Flags []uint64
-
-func (i *uint64Flags) String() string {
-	return "hi"
-}
-
-func (i *uint64Flags) Set(value string) error {
-	var intVal uint64
-	fmt.Sscan(value, &intVal)
-
-	*i = append(*i, intVal)
-	return nil
-}
-
-var validatorIndices uint64Flags
+var validatorIndices = flag.String("validator-indices", "", "Validator indices on which to gather metrics. Multiple validators may be specified as a comma separated list, e.g. 12345,98765")
 
 func newBalanceGauge(labels map[string]string) prometheus.Gauge {
 	return prometheus.NewGauge(prometheus.GaugeOpts{
@@ -167,7 +153,6 @@ func (b *balanceMonitor) Run() {
 }
 
 func main() {
-	flag.Var(&validatorIndices, "validator-index", "Validator index to gather metrics on. This option can be specified multiple times to gather metrics on multiple validators.")
 	flag.Parse()
 
 	log.Println(fmt.Sprintf("listen-address: %s", *listenAddr))
@@ -179,7 +164,18 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	for _, validatorIndex := range validatorIndices {
+	var parsedValidatorIndices []uint64
+	for _, validatorIndex := range strings.Split(*validatorIndices, ",") {
+		var i uint64
+		_, err := fmt.Sscan(strings.TrimSpace(validatorIndex), &i)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		parsedValidatorIndices = append(parsedValidatorIndices, i)
+	}
+
+	for _, validatorIndex := range parsedValidatorIndices {
 		monitor := newBalanceMonitor(*refreshInterval, client, validatorIndex)
 		go monitor.Run()
 	}

@@ -7,8 +7,7 @@ A prometheus exporter that surfaces metrics from a beaconchain node. Tested with
 Install with `go get`:
 
 ```sh
-go get github.com/landakram/eth2-prometheus-exporter/cmd/eth2-promethe
-us-exporter
+go get github.com/landakram/eth2-prometheus-exporter/cmd/eth2-prometheus-exporter
 ```
 
 Or grab a binary for your platform from the [Releases](https://github.com/landakram/eth2-prometheus-exporter/releases) page.
@@ -18,7 +17,7 @@ Or grab a binary for your platform from the [Releases](https://github.com/landak
 If you are running `eth2-prometheus-exporter` on the same box as your beaconchain node, simply specify the validators that you would like to track by index:
 
 ```sh
-eth2-prometheus-exporter --validator-index 12345 --validator-index 98765
+eth2-prometheus-exporter --validator-indices 12345,98765
 ```
 
 `eth2-prometheus-exporter` exposes an endpoint, `http://localhost:8080/metrics` by default, that is suitable for scraping by a [prometheus server](https://prometheus.io/).
@@ -34,8 +33,8 @@ Usage of eth2-prometheus-exporter:
     	The address to listen on for HTTP requests. (default ":8080")
   -refresh-interval duration
     	The interval between polling the beacon-chain for metrics. (default 5s)
-  -validator-index value
-    	Validator index to gather metrics on. This option can be specified multiple times to gather metrics on multiple validators.
+  -validator-indices string
+    	Validator indices on which to gather metrics. Multiple validators may be specified as a comma separated list, e.g. 12345,98765
 ```
 
 ### Available metrics
