@@ -167,7 +167,7 @@ func (b *balanceMonitor) Run() {
 }
 
 func main() {
-	flag.Var(&validatorIndices, "validator-index", "Validator index to gather metrics on.")
+	flag.Var(&validatorIndices, "validator-index", "Validator index to gather metrics on. This option can be specified multiple times to gather metrics on multiple validators.")
 	flag.Parse()
 
 	log.Println(fmt.Sprintf("listen-address: %s", *listenAddr))
@@ -179,13 +179,8 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	monitors := map[uint64]*balanceMonitor{}
 	for _, validatorIndex := range validatorIndices {
 		monitor := newBalanceMonitor(*refreshInterval, client, validatorIndex)
-		monitors[validatorIndex] = monitor
-	}
-
-	for _, monitor := range monitors {
 		go monitor.Run()
 	}
 
