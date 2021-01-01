@@ -2,6 +2,17 @@
 
 A prometheus exporter that surfaces metrics from a beaconchain node. Tested with Lighthouse.
 
+## Installation
+
+Install with `go get`:
+
+```sh
+go get github.com/landakram/eth2-prometheus-exporter/cmd/eth2-promethe
+us-exporter
+```
+
+Or grab a binary for your platform from the [Releases](https://github.com/landakram/eth2-prometheus-exporter/releases) page.
+
 ## Usage
 
 If you are running `eth2-prometheus-exporter` on the same box as your beaconchain node, simply specify the validators that you would like to track by index:
