@@ -12,6 +12,8 @@ go get github.com/landakram/eth2-prometheus-exporter/cmd/eth2-prometheus-exporte
 
 Or grab a binary for your platform from the [Releases](https://github.com/landakram/eth2-prometheus-exporter/releases) page.
 
+`eth2-prometheus-exporter` has also been packaged for docker so that it's easy to integrate into a kubernetes cluster. Check out the [repository on docker hub](https://hub.docker.com/r/landakram/eth2-prometheus-exporter).
+
 ## Usage
 
 If you are running `eth2-prometheus-exporter` on the same box as your beaconchain node, simply specify the validators that you would like to track by index:
